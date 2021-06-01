@@ -1,0 +1,87 @@
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    flex: 0.25;
+    height: 100vh;
+    background-color: #2f3135;
+  }
+  
+  .sidebarheader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    padding: 20px;
+    background-color: #2f3135;
+    border-bottom: 2px solid #26282c;
+  }
+  
+  .sidebarchannels {
+    flex: 1;
+  }
+  
+  .sidebaraddChannel {
+    cursor: pointer;
+  }
+  
+  .sidebaraddChannel:hover {
+    color: white;
+  }
+  
+  .sidebarchannelHeader {
+    display: flex;
+    align-items: center;
+  }
+  
+  .sidebarchannelsHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    color: gray;
+    background-color: #2f3135;
+  }
+  
+  .sidebarvoice,
+  .sidebarprofile {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: gray;
+    background-color: #2f3135;
+    padding: 10px;
+    border-top: 1px solid gray;
+  }
+  
+  .sidebarvoiceInfo,
+  .sidebarprofileInfo {
+    flex: 1;
+    padding: 10px;
+  }
+  
+  .sidebarvoiceInfo > h3 {
+    color: #4fb185;
+  }
+  
+  .sidebarprofileInfo > h3 {
+    color: white;
+    padding-bottom: 3px;
+  }
+  
+  .sidebarvoiceInfo > p,
+  .sidebarprofileInfo > p {
+    font-size: smaller;
+  }
+  
+  .sidebarvoiceIcon {
+    color: #4fb185;
+  }
+  
+  .sidebarvoiceIcon > .MuiSvgIcon-root,
+  .sidebarprofileIcon > .MuiSvgIcon-root {
+    padding: 10px;
+  }
+  
+  .userimage {
+    cursor: pointer;
+  }
