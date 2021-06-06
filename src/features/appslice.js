@@ -1,32 +1,22 @@
-import {createSlice} from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
 
-
-export const Appslice=createSlice({
-    name:"app",
-    initialState:{
-        channelId:null,
-        channelname:null,
+export const appSlice = createSlice({
+  name: "app",
+  initialState: {
+    channelId: null,
+    channelName: null,
+  },
+  reducers: {
+    setChannelInfo: (state, action) => {
+      state.channelId = action.payload.channelId;
+      state.channelName = action.payload.channelName;
     },
+  },
+});
 
-    reducers:{
-        Setchannelinfo:(state,action)=> {
-            state.channelId=action.payload;
-            state.channelname=action.payload;
+export const { setChannelInfo } = appSlice.actions;
 
-        }
-    }
+export const selectChannelId = (state) => state.app.channelId;
+export const selectChannelName = (state) => state.app.channelName;
 
-    
-
-
-})
-
-export const  {Setchannelinfo}=Appslice.actions;
-
-
-export const selectchannelId=(state)=>state.app.channelId;
-export const selectchannelname=(state)=>state.app.channelname;
-
-
-
-export default Appslice.reducer;
+export default appSlice.reducer;

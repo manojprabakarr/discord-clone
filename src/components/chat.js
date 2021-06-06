@@ -1,4 +1,5 @@
 import React,{useState,useEffect} from 'react'
+import Message from './message';
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import PeopleAltRoundedIcon from "@material-ui/icons/PeopleAltRounded";
 import SearchRoundedIcon from "@material-ui/icons/SearchRounded";
@@ -9,84 +10,112 @@ import GifIcon from "@material-ui/icons/Gif";
 import CardGiftcardIcon from "@material-ui/icons/CardGiftcard";
 import EmojiEmotionsIcon from "@material-ui/icons/EmojiEmotions";
 import EditLocationRoundedIcon from "@material-ui/icons/EditLocationRounded";
-import Message from './message';
 import './chat.css'
-import firebase from 'firebase';
-import db from '../firebase';
-import {useSelector} from 'react-redux';
-import {selectchannelId,selectchannelname} from '../features/appslice';
+import {selectChannelName,selectChannelId} from '../features/appslice'
+import {useSelector} from 'react-redux'
 import {Selectuser} from '../features/userslice';
+import db from '../firebase';
+import firebase from 'firebase'
+
 
 
 function Chat() {
   const user = useSelector(Selectuser);
-  const channelId=useSelector(selectchannelId);
-  const channelname= useSelector(selectchannelname);
-  const [input, setInput] = useState("");
-  
-  
-
+  const channelId = useSelector(selectChannelId);
+  const channelName = useSelector(selectChannelName);
+  const [input, setinput] = useState("");
+  const [message,setmessage]=useState([]);
   
 
-
- 
   const handleInputChange = (e) => {
-    setInput(e.target.value);
+    setinput(e.target.value);
   };
-    return (
-        <div className="chat">
-              <div className="chat_header">
-        <div className="chat_headerLeft">
-          <h3>
-            <span className="chatHeader_hash">#</span>
-            channelname
+  
+
+  useEffect(()=> {
+    if(channelId){
+      db.collection("channels").doc(channelId).collection("messages").orderBy("timestamp","desc").onSnapshot((snapshot) =>
+      setmessage(snapshot.docs.map((doc) => doc.data()))
+    );
+    }
+
+  },[channelId]);
+
+  const Sendmessage=(e)=> {
+    e.preventDefault();
+    db.collection("channels").doc(channelId).collection("messages").add({
+      message:input,
+      user:user,
+      timestamp:firebase.firestore.FieldValue.serverTimestamp(),
+    })
+    setinput("");
+
+
+  }
+ 
+
+
+  return (
+    <div className="chat">
+      <div className="chatheader">
+        <div className="headerleft">
+        <h3>
+            <span className="headerhash">#</span>
+            {channelName}
           </h3>
+
         </div>
-        <div className="chat_headerRight">
-          <NotificationsIcon />
+        <div className="headerright">
+        <NotificationsIcon />
           <EditLocationRoundedIcon />
           <PeopleAltRoundedIcon />
 
-          <div className="chat_headerSearch">
+          <div className="headersearch">
             <input type="text" placeholder="Search" />
             <SearchRoundedIcon />
           </div>
 
           <SendRoundedIcon />
           <HelpRoundedIcon />
+
         </div>
       </div>
-      {/* chat messages */}
-      <div className="chat_messages">
-       
+
+      <div className="chatmessages">
+      {message.map((messages)=>(
           <Message
-           
-          />
-       
+          timestamp={messages.timestamp}
+          message={messages.message}
+          user={messages.user}/>
+        ))}
+
       </div>
-      <div className="chat_input">
+
+
+      <div className="chatinput">
         <AddCircleIcon fontSize="large" />
         <form>
           <input
             value={input}
-          
+           disabled={!channelId}
             onChange={handleInputChange}
             type="text"
             placeholder={`Message #Youtube`}
           />
-          <button   type="submit" className="input_button">
+          <button onClick={Sendmessage} type="submit" className="inputbutton">
             send message
           </button>
         </form>
-        <div className="input_icons">
+        <div className="inputicons">
           <CardGiftcardIcon fontSize="large" />
           <GifIcon fontSize="large" />
           <EmojiEmotionsIcon fontSize="large" />
         </div>
       </div>
-            
-        </div>
-    )
-}
+     
 
+    </div>
+  )
+
+}
 export default Chat
